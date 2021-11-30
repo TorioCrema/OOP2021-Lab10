@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -84,7 +85,25 @@ public final class LambdaUtilities {
         /*
          * Suggestion: consider Map.merge
          */
-        return null;
+        Map<R, Set<T>> m = new HashMap<>();
+//        list.forEach(t -> {
+//            if (m.containsKey(op.apply(t))) {
+//                m.get(op.apply(t)).add(t);
+//            } else {
+//                Set<T> s = new TreeSet<>();
+//                s.add(t);
+//                m.put(op.apply(t), s);
+//            }
+//        });
+        list.forEach(t -> {
+            Set<T> set = new TreeSet<>();
+            set.add(t);
+            m.merge(op.apply(t), set, (s, v) -> {
+                s.addAll(v);
+                return s;
+            });
+        });
+        return m;
     }
 
     /**
