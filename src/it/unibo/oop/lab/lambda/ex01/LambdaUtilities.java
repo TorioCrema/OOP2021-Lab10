@@ -86,15 +86,6 @@ public final class LambdaUtilities {
          * Suggestion: consider Map.merge
          */
         final Map<R, Set<T>> m = new HashMap<>();
-//        list.forEach(t -> {
-//            if (m.containsKey(op.apply(t))) {
-//                m.get(op.apply(t)).add(t);
-//            } else {
-//                Set<T> s = new TreeSet<>();
-//                s.add(t);
-//                m.put(op.apply(t), s);
-//            }
-//        });
         list.forEach(t -> {
             Set<T> set = new TreeSet<>();
             set.add(t);
