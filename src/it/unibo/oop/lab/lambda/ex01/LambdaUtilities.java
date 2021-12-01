@@ -85,7 +85,7 @@ public final class LambdaUtilities {
         /*
          * Suggestion: consider Map.merge
          */
-        Map<R, Set<T>> m = new HashMap<>();
+        final Map<R, Set<T>> m = new HashMap<>();
 //        list.forEach(t -> {
 //            if (m.containsKey(op.apply(t))) {
 //                m.get(op.apply(t)).add(t);
@@ -124,7 +124,9 @@ public final class LambdaUtilities {
          * 
          * Keep in mind that a map can be iterated through its forEach method
          */
-        return null;
+        final Map<K, V> newMap = new HashMap<>();
+        map.forEach((k, v) -> newMap.put(k, v.orElse(def.get())));
+        return newMap;
     }
 
     /**
