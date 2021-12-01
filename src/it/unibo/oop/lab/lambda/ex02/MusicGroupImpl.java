@@ -1,6 +1,7 @@
 package it.unibo.oop.lab.lambda.ex02;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +34,10 @@ public final class MusicGroupImpl implements MusicGroup {
 
     @Override
     public Stream<String> orderedSongNames() {
-        return null;
+        final List<String> l = new ArrayList<>();
+        this.songs.forEach(s -> l.add(s.getSongName()));
+        Collections.sort(l);
+        return l.stream();
     }
 
     @Override
@@ -45,7 +49,13 @@ public final class MusicGroupImpl implements MusicGroup {
 
     @Override
     public Stream<String> albumInYear(final int year) {
-        return null;
+        final List<String> l = new ArrayList<>();
+        this.albums.forEach((n, y) -> {
+        	if (y.equals(year)) {
+        		l.add(n);
+        	}
+        });
+        return l.stream();
     }
 
     @Override
