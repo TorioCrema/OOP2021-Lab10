@@ -100,7 +100,7 @@ public final class MusicGroupImpl implements MusicGroup {
             m.put(Optional.of(x), duration.getAsDouble());
         });
         return m.entrySet().stream()
-                .max((x, y) -> x.getValue() > y.getValue() ? 1 : -1)
+                .max((x, y) -> x.getValue().compareTo(y.getValue()))
                 .get().getKey();
     }
 
