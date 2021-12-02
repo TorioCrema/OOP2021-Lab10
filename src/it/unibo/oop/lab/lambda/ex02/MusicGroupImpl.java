@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Set;
@@ -90,7 +91,17 @@ public final class MusicGroupImpl implements MusicGroup {
 
     @Override
     public Optional<String> longestAlbum() {
-        return null;
+        final Map<Optional<String>, Double> m = new HashMap<>();
+        this.albums.forEach((x, y) -> {
+            final OptionalDouble duration = this.songs.stream()
+            .filter(s -> s.getAlbumName().isPresent() ? s.getAlbumName().get().equals(x) : false)
+            .mapToDouble(s -> s.getDuration())
+            .reduce((a, b) -> a + b);
+            m.put(Optional.of(x), duration.getAsDouble());
+        });
+        return m.entrySet().stream()
+                .max((x, y) -> x.getValue() > y.getValue() ? 1 : -1)
+                .get().getKey();
     }
 
     private static final class Song {
