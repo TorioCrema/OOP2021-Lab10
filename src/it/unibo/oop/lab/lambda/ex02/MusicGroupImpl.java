@@ -70,7 +70,7 @@ public final class MusicGroupImpl implements MusicGroup {
     @Override
     public int countSongsInNoAlbum() {
         return (int) this.songs.stream()
-        		.filter(s -> s.getAlbumName().isEmpty() ? true : false)
+        		.filter(s -> s.getAlbumName().isEmpty())
         		.count();
     }
 
@@ -79,7 +79,8 @@ public final class MusicGroupImpl implements MusicGroup {
         return this.songs.stream()
         		.filter(s -> s.getAlbumName().isPresent())
         		.filter(s -> s.getAlbumName().get().equals(albumName))
-        		.mapToDouble(s -> s.getDuration()).average();
+        		.mapToDouble(s -> s.getDuration())
+        		.average();
     }
 
     @Override
