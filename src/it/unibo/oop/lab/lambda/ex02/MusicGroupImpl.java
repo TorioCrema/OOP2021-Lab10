@@ -2,14 +2,15 @@ package it.unibo.oop.lab.lambda.ex02;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -76,17 +77,16 @@ public final class MusicGroupImpl implements MusicGroup {
     @Override
     public OptionalDouble averageDurationOfSongs(final String albumName) {
         return this.songs.stream()
-        		.filter(s -> s.getAlbumName().isPresent() ? s.getAlbumName().get().equals(albumName) : false)
+        		.filter(s -> s.getAlbumName().isPresent())
+        		.filter(s -> s.getAlbumName().get().equals(albumName))
         		.mapToDouble(s -> s.getDuration()).average();
     }
 
     @Override
     public Optional<String> longestSong() {
-        return Optional.of(
-                this.songs.stream()
-                .max((x, y) -> x.getDuration() > y.getDuration() ? 1 : -1)
-                .get()
-                .getSongName());
+        return this.songs.stream()
+                .collect(Collectors.maxBy(Comparator.comparingDouble(Song::getDuration)))
+                .map(Song::getSongName);
    }
 
     @Override
