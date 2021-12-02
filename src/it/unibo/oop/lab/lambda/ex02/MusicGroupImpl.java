@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Set;
@@ -51,37 +52,33 @@ public final class MusicGroupImpl implements MusicGroup {
 
     @Override
     public Stream<String> albumInYear(final int year) {
-        final List<String> l = new ArrayList<>();
-        this.albums.forEach((n, y) -> {
-        	if (y.equals(year)) {
-        		l.add(n);
-        	}
-        });
-        return l.stream();
+        return this.albums.entrySet().stream()
+                .filter(x -> x.getValue().equals(year))
+                .map(Entry::getKey);
     }
 
     @Override
     public int countSongs(final String albumName) {
         return (int) this.songs.stream()
-        		.filter(s -> s.getAlbumName().isPresent())
-        		.filter(s -> s.getAlbumName().get().equals(albumName))
-        		.count();
+                .filter(s -> s.getAlbumName().isPresent())
+                .filter(s -> s.getAlbumName().get().equals(albumName))
+                .count();
     }
 
     @Override
     public int countSongsInNoAlbum() {
         return (int) this.songs.stream()
-        		.filter(s -> s.getAlbumName().isEmpty())
-        		.count();
+                .filter(s -> s.getAlbumName().isEmpty())
+                .count();
     }
 
     @Override
     public OptionalDouble averageDurationOfSongs(final String albumName) {
         return this.songs.stream()
-        		.filter(s -> s.getAlbumName().isPresent())
-        		.filter(s -> s.getAlbumName().get().equals(albumName))
-        		.mapToDouble(s -> s.getDuration())
-        		.average();
+                .filter(s -> s.getAlbumName().isPresent())
+                .filter(s -> s.getAlbumName().get().equals(albumName))
+                .mapToDouble(s -> s.getDuration())
+                .average();
     }
 
     @Override
