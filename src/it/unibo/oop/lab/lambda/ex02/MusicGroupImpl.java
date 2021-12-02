@@ -37,10 +37,9 @@ public final class MusicGroupImpl implements MusicGroup {
 
     @Override
     public Stream<String> orderedSongNames() {
-        final List<String> l = new ArrayList<>();
-        this.songs.forEach(s -> l.add(s.getSongName()));
-        Collections.sort(l);
-        return l.stream();
+        return this.songs.stream()
+                .map(Song::getSongName)
+                .sorted();
     }
 
     @Override
