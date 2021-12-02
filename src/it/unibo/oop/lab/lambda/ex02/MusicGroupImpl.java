@@ -44,9 +44,7 @@ public final class MusicGroupImpl implements MusicGroup {
 
     @Override
     public Stream<String> albumNames() {
-        final List<String> l = new ArrayList<>();
-        this.albums.forEach((n, y) -> l.add(n));
-        return l.stream();
+        return this.albums.entrySet().stream().map(Entry::getKey);
     }
 
     @Override
