@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.Toolkit;
+import java.util.Arrays;
 import java.util.function.Function;
 
 import javax.swing.BorderFactory;
@@ -42,6 +43,9 @@ public final class LambdaFilter extends JFrame {
         }),
         COUNTLINES("Count lines", s -> {
             return String.valueOf(s.split("\n").length);
+        }),
+        ALPHABETICAL("Alphabetical order", s -> {
+            return Arrays.stream(s.split("(\s)|(\n)")).sorted().reduce((x, y) -> x + " " + y).get();
         });
 
         private final String commandName;
