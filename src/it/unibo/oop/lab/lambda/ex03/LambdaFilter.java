@@ -8,6 +8,7 @@ import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.util.Arrays;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -49,11 +50,11 @@ public final class LambdaFilter extends JFrame {
             return Arrays.stream(s.split(ANY_NON_WORD)).sorted().reduce((x, y) -> x + "\n" + y).get();
         }),
         COUNTOCCURRENCES("Count occurences", s -> {
-            final String out = new String();
-            Arrays.stream(s.split("(\s)|(\n)")).sorted().distinct().forEach(x -> {
-                out.concat(x + "-> " + Arrays.stream(s.split("(\s)|(\n)")).filter(a -> a.equals(x)).count() + " ");
-            });
-            return out;
+            return Arrays.stream(s.split(ANY_NON_WORD))
+                    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                    .entrySet().stream()
+                    .map(x -> x.getKey() + " -> " + x.getValue())
+                    .collect(Collectors.joining("\n"));
         });
 
         private final String commandName;
