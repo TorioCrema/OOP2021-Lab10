@@ -34,6 +34,7 @@ import javax.swing.JTextArea;
 public final class LambdaFilter extends JFrame {
 
     private static final long serialVersionUID = 1760990730218643730L;
+    private static final String ANY_NON_WORD = "(\\s|\\p{Punct})+";
 
     private enum Command {
         IDENTITY("No modifications", Function.identity()),
@@ -42,10 +43,17 @@ public final class LambdaFilter extends JFrame {
             return String.valueOf(s.chars().count());
         }),
         COUNTLINES("Count lines", s -> {
-            return String.valueOf(s.split("\n").length);
+            return String.valueOf(s.chars().filter(c -> c == '\n').count());
         }),
         ALPHABETICAL("Alphabetical order", s -> {
-            return Arrays.stream(s.split("(\s)|(\n)")).sorted().reduce((x, y) -> x + " " + y).get();
+            return Arrays.stream(s.split(ANY_NON_WORD)).sorted().reduce((x, y) -> x + "\n" + y).get();
+        }),
+        COUNTOCCURRENCES("Count occurences", s -> {
+            final String out = new String();
+            Arrays.stream(s.split("(\s)|(\n)")).sorted().distinct().forEach(x -> {
+                out.concat(x + "-> " + Arrays.stream(s.split("(\s)|(\n)")).filter(a -> a.equals(x)).count() + " ");
+            });
+            return out;
         });
 
         private final String commandName;
