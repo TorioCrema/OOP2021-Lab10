@@ -87,15 +87,9 @@ public final class MusicGroupImpl implements MusicGroup {
 
     @Override
     public Optional<String> longestAlbum() {
-        final Map<Optional<String>, Double> m = new HashMap<>();
-        this.albums.forEach((x, y) -> {
-            final OptionalDouble duration = this.songs.stream()
-            .filter(s -> s.getAlbumName().isPresent() ? s.getAlbumName().get().equals(x) : false)
-            .mapToDouble(s -> s.getDuration())
-            .reduce((a, b) -> a + b);
-            m.put(Optional.of(x), duration.getAsDouble());
-        });
-        return m.entrySet().stream()
+        return this.songs.stream().filter(s -> s.getAlbumName().isPresent())
+                .collect(Collectors.groupingBy(Song::getAlbumName, Collectors.summingDouble(Song::getDuration)))
+                .entrySet().stream()
                 .max((x, y) -> x.getValue().compareTo(y.getValue()))
                 .get().getKey();
     }
